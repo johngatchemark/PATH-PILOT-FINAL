@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+* {
+  font-family: var(--font-sans)!important;
+}
+
+@layer base {
+  /* Ensure all elements inherit the default font */
+  *, ::before, ::after {
+    font-family: inherit;
+  }
+  
+  html, body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Explicitly target form elements which often don't inherit font-family */
+  button, input, optgroup, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+  }
+
+  /* Cursor pointer for interactive elements */
+  button, 
+  [type='button'], 
+  [type='reset'], 
+  [type='submit'],
+  select,
+  summary {
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  full_name     String?
+  birthday      DateTime?
+  address       String?
+  avatar_url    String?
+  education     String?  
+  current_level String?   // e.g. "Student", "Junior"
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  skills      UserSkill[]
+  experiences UserExperience[]
+  feedbacks   Feedback[]
+}
+
+model UserSkill {
+  id         String @id @default(uuid())
+  skill_name String
+  userId     String
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserExperience {
+  id       String @id @default(uuid())
+  title    String
+  duration Int    // in months
+  userId   String
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Career {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  domain      String
+
+  skills   CareerSkill[]
+  levels   CareerLevel[]
+  feedback Feedback[]
+}
+
+model CareerSkill {
+  id          String  @id @default(uuid())
+  skill_name  String
+  is_required Boolean @default(true)
+  careerId    String
+  career      Career  @relation(fields: [careerId], references: [id], onDelete: Cascade)
+}
+
+model CareerLevel {
+  id                        String @id @default(uuid())
+  level_name                String // "Intern", "Junior", "Mid", "Senior"
+  required_experience_years Int
+  careerId                  String
+  career                    Career @relation(fields: [careerId], references: [id], onDelete: Cascade)
+}
+
+model Feedback {
+  id         String   @id @default(uuid())
+  userId     String
+  careerId   String
+  isRelevant Boolean
+  createdAt  DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  career Career @relation(fields: [careerId], references: [id], onDelete: Cascade)
+}

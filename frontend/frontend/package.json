@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@types/zxcvbn": "^4.4.5",
+    "zxcvbn": "^4.4.2"
+  }
+}
