@@ -5,6 +5,8 @@ import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import PasswordStrengthBar from '../components/PasswordStrengthBar';
 import axios from 'axios';
 
+import Logo from '../components/Logo';
+
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
@@ -19,7 +21,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) navigate('/home');
+      if (session) navigate('/dashboard');
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -83,7 +85,7 @@ const Login: React.FC = () => {
         });
 
         if (signInError) throw signInError;
-        navigate('/home');
+        navigate('/dashboard');
       }
     } catch (err: any) {
       setError(err.message);
@@ -99,9 +101,8 @@ const Login: React.FC = () => {
       
       <div className="w-full max-w-md bg-white/5 border border-white/10 p-8 rounded-[2rem] backdrop-blur-xl z-10 shadow-2xl relative">
         <div className="text-center mb-8">
-          <div className="relative inline-block mb-4">
-            <div className="absolute inset-0 bg-purple-500 blur-2xl opacity-20 animate-pulse" />
-            <Compass className="w-14 h-14 text-purple-500 relative" />
+          <div className="flex justify-center mb-6">
+            <Logo size="lg" showText={false} />
           </div>
           <h2 className="text-3xl font-bold text-white tracking-tight">
             {isSignUp ? 'Create Account' : 'Welcome Back'}
@@ -112,6 +113,7 @@ const Login: React.FC = () => {
               : 'Sign in securely to access your career dashboard.'}
           </p>
         </div>
+
         
         <form onSubmit={handleAuth} className="space-y-5">
           {error && (

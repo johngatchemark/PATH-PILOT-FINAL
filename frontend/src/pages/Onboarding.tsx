@@ -1,9 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Compass, Sparkles, Briefcase, GraduationCap, LogOut, Loader2, ArrowLeft } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import Logo from '../components/Logo';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import UserProfileForm from '../components/UserProfileForm';
+import { 
+  LogOut, 
+  ArrowLeft, 
+  Sparkles, 
+  GraduationCap, 
+  Briefcase, 
+  Compass, 
+  Loader2 
+} from 'lucide-react';
 
 const Onboarding: React.FC = () => {
   const navigate = useNavigate();
@@ -63,10 +72,10 @@ const Onboarding: React.FC = () => {
         education: profile.education,
         experienceYears: profile.experienceYears
       });
-      navigate('/home'); 
+      navigate('/analyzing'); 
     } catch (error) {
       console.error("Backend error, proceeding with local state.", error);
-      navigate('/home', { state: { profile } }); 
+      navigate('/analyzing', { state: { profile } }); 
     } finally {
       setSubmitting(false);
     }
@@ -78,12 +87,7 @@ const Onboarding: React.FC = () => {
       
       {/* Navbar Decoration */}
       <div className="absolute top-4 left-0 right-0 px-8 flex justify-between items-center z-20">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-600/20">
-            <Compass className="w-5 h-5 text-white" />
-          </div>
-          <span className="font-bold text-white tracking-tight">PathPilot <span className="text-blue-500">ID</span></span>
-        </div>
+        <Logo size="sm" />
         
         <div className="flex items-center gap-4">
           <span className="hidden md:block text-xs font-medium text-slate-500 bg-white/5 px-3 py-1.5 rounded-full border border-white/10 uppercase tracking-widest">{session?.user?.email}</span>
@@ -92,6 +96,7 @@ const Onboarding: React.FC = () => {
           </button>
         </div>
       </div>
+
 
       <div className="w-full max-w-2xl bg-white/5 border border-white/10 p-4 md:p-10 rounded-[2.5rem] backdrop-blur-2xl z-10 shadow-2xl relative">
         <div className="absolute top-0 right-10 -translate-y-1/2 flex gap-2">
