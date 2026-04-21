@@ -21,13 +21,28 @@ model User {
   skills      UserSkill[]
   experiences UserExperience[]
   feedbacks   Feedback[]
+  interests   UserInterest[]
+  trajectories Trajectory[]
 }
 
 model UserSkill {
-  id         String @id @default(uuid())
-  skill_name String
-  userId     String
-  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id            String      @id @default(uuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  careerSkillId String
+  careerSkill   CareerSkill @relation(fields: [careerSkillId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, careerSkillId])
+}
+
+model UserInterest {
+  id               String         @id @default(uuid())
+  userId           String
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  careerInterestId String
+  careerInterest   CareerInterest @relation(fields: [careerInterestId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, careerInterestId])
 }
 
 model UserExperience {
@@ -44,9 +59,11 @@ model Career {
   description String
   domain      String
 
-  skills   CareerSkill[]
-  levels   CareerLevel[]
-  feedback Feedback[]
+  skills    CareerSkill[]
+  levels    CareerLevel[]
+  feedback  Feedback[]
+  interests CareerInterest[]
+  trajectories Trajectory[]
 }
 
 model CareerSkill {
@@ -55,6 +72,7 @@ model CareerSkill {
   is_required Boolean @default(true)
   careerId    String
   career      Career  @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  userSkills  UserSkill[]
 }
 
 model CareerLevel {
@@ -74,4 +92,28 @@ model Feedback {
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   career Career @relation(fields: [careerId], references: [id], onDelete: Cascade)
+}
+
+model CareerInterest {
+  id            String   @id @default(uuid())
+  interest_name String
+  careerId      String
+  career        Career   @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  userInterests UserInterest[]
+}
+
+model Trajectory {
+  id           String   @id @default(uuid())
+  userId       String
+  careerId     String
+  careerTitle  String
+  score        Float
+  level        String
+  explanation  String   @db.Text
+  createdAt    DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  career Career @relation(fields: [careerId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

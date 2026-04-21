@@ -31,7 +31,7 @@ const UserProfileForm: React.FC<UserProfileFormProps> = ({ userId, onComplete })
       const fileExt = file.name.split('.').pop();
       const filePath = `${userId}/${Math.random()}.${fileExt}`;
 
-      const { error: uploadError, data } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('Profile Pictures')
         .upload(filePath, file);
 

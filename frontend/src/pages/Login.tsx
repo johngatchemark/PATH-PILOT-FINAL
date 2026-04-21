@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Compass, AlertTriangle, ShieldCheck, Mail, Lock, UserPlus, LogIn, ArrowRight } from 'lucide-react';
+import { AlertTriangle, ShieldCheck, Mail, Lock, UserPlus, LogIn, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import PasswordStrengthBar from '../components/PasswordStrengthBar';
@@ -20,16 +20,19 @@ const Login: React.FC = () => {
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    if (!isSupabaseConfigured) return;
+
+    supabase.auth.getSession().then(({ data: { session } }: any) => {
       if (session) navigate('/dashboard');
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
       if (session) navigate('/onboarding');
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();

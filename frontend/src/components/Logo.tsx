@@ -1,5 +1,5 @@
 import React from 'react';
-import { Compass } from 'lucide-react';
+import logoImg from '../assets/logo.png';
 
 interface LogoProps {
   className?: string;
@@ -9,10 +9,10 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ className = '', size = 'md', showText = true }) => {
   const sizeClasses = {
-    sm: 'w-6 h-6',
-    md: 'w-8 h-8',
-    lg: 'w-12 h-12',
-    xl: 'w-16 h-16'
+    sm: 'h-8 w-auto',
+    md: 'h-12 w-auto',
+    lg: 'h-20 w-auto',
+    xl: 'h-28 w-auto'
   };
 
   const textSizeClasses = {
@@ -25,12 +25,16 @@ const Logo: React.FC<LogoProps> = ({ className = '', size = 'md', showText = tru
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       <div className="relative group">
-        <div className={`absolute inset-0 bg-purple-500 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity rounded-full`} />
-        <Compass className={`${sizeClasses[size]} text-purple-500 relative transition-transform group-hover:rotate-12 duration-500`} />
+        <div className={`absolute inset-0 bg-purple-500 blur-3xl opacity-10 group-hover:opacity-20 transition-opacity rounded-full`} />
+        <img 
+          src={logoImg} 
+          alt="PathPilot Logo" 
+          className={`${sizeClasses[size]} relative transition-transform group-hover:scale-105 duration-500 object-contain`}
+        />
       </div>
       {showText && (
         <span className={`${textSizeClasses[size]} font-extrabold tracking-tighter text-white shrink-0`}>
-          Path<span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Pilot</span>
+          Path<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2B6D43] to-[#1E4D6B]">Pilot</span>
         </span>
       )}
     </div>
@@ -38,3 +42,4 @@ const Logo: React.FC<LogoProps> = ({ className = '', size = 'md', showText = tru
 };
 
 export default Logo;
+

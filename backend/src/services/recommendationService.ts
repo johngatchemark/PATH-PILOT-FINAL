@@ -2,6 +2,7 @@ export interface UserProfileProfile {
   skills: string[];
   interests: string[]; // (Optional, mapped to domains or general descriptions)
   experienceYears: number;
+  experiences?: { title: string; duration: number }[];
 }
 
 export interface CareerSkill {
@@ -29,6 +30,7 @@ export interface MatchResult {
 const SCORE_WEIGHTS = {
   REQUIRED_SKILL_MATCH: 5,
   OPTIONAL_SKILL_MATCH: 2,
+  PAST_EXPERIENCE_MATCH: 10,
 };
 
 /**
@@ -68,6 +70,27 @@ export function generateRecommendations(
       }
     }
 
+    // Evaluate Past Experience Similarity (Traditional AI string matching/heuristics)
+    let hasRelevantPastExperience = false;
+    if (userProfile.experiences && userProfile.experiences.length > 0) {
+      for (const exp of userProfile.experiences) {
+        if (!exp.title) continue;
+        const expLower = exp.title.toLowerCase();
+        const titleLower = career.title.toLowerCase();
+        const domainLower = career.domain.toLowerCase();
+
+        // Fuzzy match: if the past title contains the career title/domain or vice versa
+        if (
+          expLower.includes(titleLower) || titleLower.includes(expLower) ||
+          expLower.includes(domainLower) || domainLower.includes(expLower)
+        ) {
+          score += SCORE_WEIGHTS.PAST_EXPERIENCE_MATCH;
+          hasRelevantPastExperience = true;
+          break; // Avoid double scoring for the same career
+        }
+      }
+    }
+
     // Determine Job Level based on experience
     // Sort levels by required experience descending to find highest matched level
     const sortedLevels = [...career.levels].sort((a, b) => b.required_experience_years - a.required_experience_years);
@@ -88,11 +111,12 @@ export function generateRecommendations(
       matchedRequiredSkills,
       matchedOptionalSkills,
       missingRequiredSkills,
-      matchedLevel
+      matchedLevel,
+      hasRelevantPastExperience
     );
 
     // Only consider careers with a positive relation (>0 score)
-    if (score > 0 || matchedRequiredSkills.length > 0) {
+    if (score > 0 || matchedRequiredSkills.length > 0 || hasRelevantPastExperience) {
       results.push({
         careerId: career.id,
         careerTitle: career.title,
@@ -115,13 +139,18 @@ function generateExplanation(
   matchedRequired: string[],
   matchedOptional: string[],
   missingRequired: string[],
-  level: string
+  level: string,
+  hasRelevantPastExperience: boolean
 ): string {
   let explanation = `We recommend the ${level} ${careerTitle} path for you. `;
 
+  if (hasRelevantPastExperience) {
+    explanation += `Your past work experience strongly aligns with this domain, giving you a massive head start. `;
+  }
+
   if (matchedRequired.length > 0) {
     explanation += `Your profile is a strong fit because you possess key required skills: ${matchedRequired.join(', ')}. `;
-  } else {
+  } else if (!hasRelevantPastExperience) {
     explanation += `While you are missing some core skills, `;
   }
 

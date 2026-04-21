@@ -20,6 +20,7 @@ const careersData = [
       { name: "SQL", is_required: true },
       { name: "Problem Solving", is_required: true }
     ],
+    interests: ["AI Ethics", "Neural Networks", "Open Source", "System Architecture", "Web Development"],
     levels: [
       { level: "Intern", years: 0 },
       { level: "Junior", years: 1 },
@@ -38,6 +39,7 @@ const careersData = [
       { name: "Data Visualization", is_required: true },
       { name: "Statistics", is_required: false }
     ],
+    interests: ["Big Data", "Predictive Analytics", "Business Intelligence", "Machine Learning", "Mathematics"],
     levels: [
       { level: "Intern", years: 0 },
       { level: "Junior", years: 1 },
@@ -56,6 +58,7 @@ const careersData = [
       { name: "User Research", is_required: false },
       { name: "CSS", is_required: false }
     ],
+    interests: ["Creative Direction", "Accessibility", "Human-Computer Interaction", "Visual Design", "Typography"],
     levels: [
       { level: "Intern", years: 0 },
       { level: "Junior", years: 1 },
@@ -74,6 +77,7 @@ const careersData = [
       { name: "Market Research", is_required: false },
       { name: "Data Analysis", is_required: false }
     ],
+    interests: ["Strategy", "User Empathy", "Metrics", "Roadmapping", "Growth Hacking"],
     levels: [
       { level: "Associate", years: 1 },
       { level: "Mid-Level", years: 3 },
@@ -90,6 +94,7 @@ const careersData = [
       { name: "Social Media", is_required: true },
       { name: "Copywriting", is_required: true }
     ],
+    interests: ["Digital Marketing", "Brand Identity", "Storytelling", "Campaign Management", "Public Relations"],
     levels: [
       { level: "Intern", years: 0 },
       { level: "Junior", years: 1 },
@@ -106,6 +111,7 @@ const careersData = [
       { name: "Linux", is_required: false },
       { name: "Python", is_required: false }
     ],
+    interests: ["Cryptography", "Ethical Hacking", "Cloud Security", "Forensics", "Compliance"],
     levels: [
       { level: "Junior", years: 1 },
       { level: "Mid-Level", years: 3 },
@@ -122,6 +128,7 @@ const careersData = [
       { name: "CRM", is_required: false },
       { name: "Networking", is_required: true }
     ],
+    interests: ["B2B Sales", "Client Relations", "Lead Generation", "Closing deals", "Sales Strategy"],
     levels: [
       { level: "Entry", years: 0 },
       { level: "Mid-Level", years: 2 },
@@ -138,6 +145,7 @@ const careersData = [
       { name: "Employee Relations", is_required: true },
       { name: "Conflict Resolution", is_required: false }
     ],
+    interests: ["Talent Acquisition", "Company Culture", "Diversity & Inclusion", "Onboarding", "Training"],
     levels: [
       { level: "Assistant", years: 0 },
       { level: "Specialist", years: 2 },
@@ -154,6 +162,7 @@ const careersData = [
       { name: "Accounting", is_required: true },
       { name: "Forecasting", is_required: false }
     ],
+    interests: ["Investment Banking", "Corporate Finance", "Valuation", "Markets", "Fintech"],
     levels: [
       { level: "Junior", years: 1 },
       { level: "Mid-Level", years: 3 },
@@ -170,6 +179,7 @@ const careersData = [
       { name: "Problem Solving", is_required: true },
       { name: "CRM", is_required: false }
     ],
+    interests: ["Customer Retention", "Account Management", "User Onboarding", "Support", "Client Education"],
     levels: [
       { level: "Junior", years: 1 },
       { level: "Mid-Level", years: 3 },
@@ -191,6 +201,11 @@ async function main() {
           create: career.skills.map(skill => ({
             skill_name: skill.name,
             is_required: skill.is_required
+          }))
+        },
+        interests: {
+          create: career.interests.map(interest => ({
+            interest_name: interest
           }))
         },
         levels: {

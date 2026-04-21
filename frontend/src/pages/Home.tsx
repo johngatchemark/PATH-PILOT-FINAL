@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles, ArrowRight, AlertTriangle } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import Logo from '../components/Logo';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    if (!isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
+
+    supabase.auth.getSession().then(({ data: { session } }: any) => {
       if (session) {
         navigate('/dashboard');
       } else {
@@ -18,7 +22,7 @@ const Home: React.FC = () => {
       }
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
       if (session) navigate('/dashboard');
       else setLoading(false);
     });
