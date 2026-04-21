@@ -116,7 +116,7 @@ export function generateRecommendations(
     );
 
     // Only consider careers with a positive relation (>0 score)
-    if (score > 0 || matchedRequiredSkills.length > 0 || hasRelevantPastExperience) {
+    if (score > 0) {
       results.push({
         careerId: career.id,
         careerTitle: career.title,

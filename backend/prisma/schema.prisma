@@ -23,6 +23,7 @@ model User {
   feedbacks   Feedback[]
   interests   UserInterest[]
   trajectories Trajectory[]
+  savedPaths   SavedPath[]
 }
 
 model UserSkill {
@@ -58,18 +59,22 @@ model Career {
   title       String
   description String
   domain      String
+  category    String   @default("General")
 
   skills    CareerSkill[]
   levels    CareerLevel[]
   feedback  Feedback[]
   interests CareerInterest[]
   trajectories Trajectory[]
+  savedPaths   SavedPath[]
+  milestones   Milestone[]
 }
 
 model CareerSkill {
   id          String  @id @default(uuid())
   skill_name  String
   is_required Boolean @default(true)
+  category    String  @default("Technical")
   careerId    String
   career      Career  @relation(fields: [careerId], references: [id], onDelete: Cascade)
   userSkills  UserSkill[]
@@ -97,6 +102,7 @@ model Feedback {
 model CareerInterest {
   id            String   @id @default(uuid())
   interest_name String
+  category      String   @default("General")
   careerId      String
   career        Career   @relation(fields: [careerId], references: [id], onDelete: Cascade)
   userInterests UserInterest[]
@@ -116,4 +122,26 @@ model Trajectory {
   career Career @relation(fields: [careerId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+model SavedPath {
+  id        String   @id @default(uuid())
+  userId    String
+  careerId  String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  career Career @relation(fields: [careerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, careerId])
+}
+
+model Milestone {
+  id          String @id @default(uuid())
+  careerId    String
+  title       String
+  description String @db.Text
+  order       Int
+
+  career Career @relation(fields: [careerId], references: [id], onDelete: Cascade)
 }

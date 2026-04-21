@@ -224,6 +224,78 @@ app.put('/api/users/:id', async (req, res) => {
   }
 });
 
+// --- Saved Paths Endpoints ---
+
+app.get('/api/users/:id/saved-paths', async (req, res) => {
+  try {
+    const saved = await prisma.savedPath.findMany({
+      where: { userId: req.params.id },
+      include: { 
+        career: { 
+          include: { 
+            milestones: { orderBy: { order: 'asc' } }
+          } 
+        } 
+      }
+    });
+    res.json(saved);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch saved paths' });
+  }
+});
+
+app.post('/api/users/:id/saved-paths', async (req, res) => {
+  try {
+    const { careerId } = req.body;
+    const saved = await prisma.savedPath.upsert({
+      where: { 
+        userId_careerId: { 
+          userId: req.params.id, 
+          careerId 
+        } 
+      },
+      update: {},
+      create: { 
+        userId: req.params.id, 
+        careerId 
+      }
+    });
+    res.json(saved);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to save path' });
+  }
+});
+
+app.delete('/api/users/:id/saved-paths/:careerId', async (req, res) => {
+  try {
+    await prisma.savedPath.delete({
+      where: { 
+        userId_careerId: { 
+          userId: req.params.id, 
+          careerId: req.params.careerId 
+        } 
+      }
+    });
+    res.json({ message: 'Path removed' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to remove path' });
+  }
+});
+
+// --- Milestones Endpoint ---
+
+app.get('/api/careers/:id/milestones', async (req, res) => {
+  try {
+    const milestones = await prisma.milestone.findMany({
+      where: { careerId: req.params.id },
+      orderBy: { order: 'asc' }
+    });
+    res.json(milestones);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch milestones' });
+  }
+});
+
 app.get('/api/users/:id', async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
@@ -254,23 +326,23 @@ app.get('/api/users/:id', async (req, res) => {
 app.get('/api/metadata', async (req, res) => {
   try {
     const skills = await prisma.careerSkill.findMany({
-      select: { skill_name: true },
+      select: { skill_name: true, category: true },
       distinct: ['skill_name']
     });
     
     const interests = await prisma.careerInterest.findMany({
-      select: { interest_name: true },
+      select: { interest_name: true, category: true },
       distinct: ['interest_name']
     });
 
     const careers = await prisma.career.findMany({
-      select: { title: true }
+      select: { title: true, category: true }
     });
 
     res.json({
-      skills: skills.map(s => s.skill_name),
-      interests: interests.map(i => i.interest_name),
-      careers: careers.map(c => c.title)
+      skills,
+      interests,
+      careers
     });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });

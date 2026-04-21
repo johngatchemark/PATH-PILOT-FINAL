@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Analyzing from './pages/Analyzing';
 import CareerResults from './pages/CareerResults';
 import Settings from './pages/Settings';
+import SavedPaths from './pages/SavedPaths';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App: React.FC = () => {
@@ -48,6 +49,14 @@ const App: React.FC = () => {
         element={
           <ProtectedRoute>
             <Settings />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/saved-paths" 
+        element={
+          <ProtectedRoute>
+            <SavedPaths />
           </ProtectedRoute>
         } 
       />

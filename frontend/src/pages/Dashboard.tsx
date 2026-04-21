@@ -99,7 +99,10 @@ const Dashboard: React.FC = () => {
           >
             <Search className="w-5 h-5" /> Analyze Career
           </button>
-          <button className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-white/5 rounded-xl transition-all">
+          <button 
+            onClick={() => navigate('/saved-paths')}
+            className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-white/5 rounded-xl transition-all"
+          >
             <Map className="w-5 h-5" /> Saved Paths
           </button>
         </nav>
@@ -274,15 +277,15 @@ const Dashboard: React.FC = () => {
                     <div className="w-20 h-20 bg-purple-500/10 rounded-full flex items-center justify-center mb-6 border border-purple-500/20">
                       <Target className="w-10 h-10 text-purple-400 opacity-80" />
                     </div>
-                    <h4 className="text-xl font-black text-white mb-3 tracking-tight">No Trajectories Found</h4>
-                    <p className="text-sm text-slate-400 mb-8 max-w-sm leading-relaxed">
-                      Your profile data didn't produce immediate matches. Run our AI analysis to discover the optimal career path tailored specifically for you.
+                    <h4 className="text-xl font-black text-white mb-3 tracking-tight">No Clear Trajectories</h4>
+                    <p className="text-sm text-slate-400 mb-8 max-w-sm leading-relaxed italic">
+                      Your profile currently has no high-confidence matches. Try refining your skills and interests in Settings to see more results.
                     </p>
                     <button 
-                      onClick={() => navigate('/analyzing')}
-                      className="px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:brightness-110 text-white font-black rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-purple-500/20 uppercase tracking-widest text-xs flex items-center gap-2"
+                      onClick={() => navigate('/settings')}
+                      className="px-8 py-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-black rounded-2xl transition-all active:scale-[0.98] uppercase tracking-widest text-xs flex items-center gap-2"
                     >
-                      <Search className="w-4 h-4" /> Find out your trajectory!
+                      Update Profile
                     </button>
                   </div>
                 )}
